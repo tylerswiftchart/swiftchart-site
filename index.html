@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiftChart — Patient Notes. Done in Seconds.</title>
+<meta name="description" content="SwiftChart generates professional SOAP notes from voice or text in seconds. Fully offline. HIPAA-conscious. Built for independent physicians.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1729;
+    --navy-mid: #1a2540;
+    --blue: #3b82f6;
+    --blue-light: #60a5fa;
+    --green: #22c55e;
+    --green-dark: #166534;
+    --amber: #f59e0b;
+    --white: #ffffff;
+    --off-white: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --gray-700: #334155;
+    --serif: 'DM Serif Display', serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--off-white);
+    color: var(--gray-700);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    height: 68px;
+    background: rgba(15, 23, 41, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: -0.3px;
+  }
+
+  .nav-logo span {
+    color: var(--blue-light);
+  }
+
+  .nav-badge {
+    display: inline-block;
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+
+  .nav-cta {
+    background: var(--blue);
+    color: var(--white);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 9px 22px;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: #2563eb; transform: translateY(-1px); }
+
+  /* ── HERO ───────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: var(--navy);
+    position: relative;
+    overflow: hidden;
+    padding: 100px 5% 80px;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+    pointer-events: none;
+  }
+
+  .hero-glow-2 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%);
+    bottom: 0;
+    left: 20%;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.2);
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 4vw, 54px);
+    color: var(--white);
+    line-height: 1.15;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--blue-light);
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.7;
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--blue);
+    color: var(--white);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 10px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(59,130,246,0.35);
+  }
+  .btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(59,130,246,0.45);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 14px 28px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.25);
+    color: var(--white);
+    background: rgba(255,255,255,0.05);
+  }
+
+  /* Hero App Preview */
+  .hero-preview {
+    position: relative;
+  }
+
+  .app-window {
+    background: #1e2a3a;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow:
+      0 40px 80px rgba(0,0,0,0.5),
+      0 0 0 1px rgba(255,255,255,0.04);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .app-bar {
+    background: #0f1729;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .app-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .app-dot.red { background: #ff5f57; }
+  .app-dot.yellow { background: #febc2e; }
+  .app-dot.green { background: #28c840; }
+
+  .app-title-bar {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 500;
+  }
+
+  .app-body {
+    padding: 20px;
+  }
+
+  .app-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+
+  .app-patient-name {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--white);
+  }
+
+  .app-visits {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+  }
+
+  .app-new-note {
+    background: var(--blue);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 6px;
+  }
+
+  .alert-box {
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+
+  .alert-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .alert-text {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+  }
+
+  .soap-box {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 14px;
+  }
+
+  .soap-row {
+    margin-bottom: 10px;
+  }
+  .soap-row:last-child { margin-bottom: 0; }
+
+  .soap-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--blue-light);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .soap-text {
+    font-size: 11px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.5;
+  }
+
+  .app-footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+  }
+
+  .app-timing {
+    font-size: 10px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .copy-btn {
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 5px;
+  }
+
+  /* ── STATS BAR ──────────────────────────── */
+  .stats-bar {
+    background: var(--navy-mid);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 28px 5%;
+  }
+
+  .stats-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: var(--serif);
+    font-size: 36px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-number span { color: var(--blue-light); }
+
+  .stat-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 400;
+  }
+
+  /* ── FEATURES ───────────────────────────── */
+  .section {
+    padding: 90px 5%;
+  }
+
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(28px, 3vw, 40px);
+    color: var(--navy);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    font-size: 16px;
+    color: var(--gray-500);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .feature-card {
+    background: var(--white);
+    border: 1px solid var(--gray-100);
+    border-radius: 14px;
+    padding: 28px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .feature-icon.blue { background: rgba(59,130,246,0.1); }
+  .feature-icon.green { background: rgba(34,197,94,0.1); }
+  .feature-icon.amber { background: rgba(245,158,11,0.1); }
+  .feature-icon.purple { background: rgba(139,92,246,0.1); }
+  .feature-icon.red { background: rgba(239,68,68,0.1); }
+  .feature-icon.teal { background: rgba(20,184,166,0.1); }
+
+  .feature-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+  }
+
+  .feature-text {
+    font-size: 14px;
+    color: var(--gray-500);
+    line-height: 1.65;
+  }
+
+  /* ── HOW IT WORKS ───────────────────────── */
+  .how-section {
+    background: var(--navy);
+    padding: 90px 5%;
+  }
+
+  .how-section .section-title { color: var(--white); }
+  .how-section .section-sub { color: rgba(255,255,255,0.5); }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    position: relative;
+  }
+
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: calc(16.6% + 28px);
+    right: calc(16.6% + 28px);
+    height: 1px;
+    background: linear-gradient(90deg, rgba(59,130,246,0.3), rgba(59,130,246,0.3));
+    pointer-events: none;
+  }
+
+  .step-card {
+    position: relative;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .step-number {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: var(--white);
+    font-family: var(--serif);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 0 8px rgba(59,130,246,0.1);
+  }
+
+  .step-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .step-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.65;
+  }
+
+  /* ── PRIVACY ────────────────────────────── */
+  .privacy-section {
+    padding: 90px 5%;
+    background: var(--off-white);
+  }
+
+  .privacy-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .privacy-badges {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .privacy-badge {
+    background: var(--white);
+    border: 1px solid var(--gray-100);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .privacy-badge-icon { font-size: 24px; }
+
+  .privacy-badge-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .privacy-badge-text {
+    font-size: 12px;
+    color: var(--gray-500);
+    line-height: 1.5;
+  }
+
+  .hipaa-box {
+    background: var(--navy);
+    border-radius: 14px;
+    padding: 28px;
+    margin-top: 20px;
+  }
+
+  .hipaa-box-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .hipaa-box-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.65;
+  }
+
+  /* ── PRICING ────────────────────────────── */
+  .pricing-section {
+    padding: 90px 5%;
+    background: var(--white);
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .price-card {
+    background: var(--off-white);
+    border: 1px solid var(--gray-100);
+    border-radius: 14px;
+    padding: 28px 22px;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .price-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+  }
+
+  .price-card.featured {
+    background: var(--navy);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 2px var(--blue);
+  }
+
+  .price-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .price-plan {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-500);
+    margin-bottom: 8px;
+  }
+
+  .price-card.featured .price-plan { color: rgba(255,255,255,0.5); }
+
+  .price-amount {
+    font-family: var(--serif);
+    font-size: 34px;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .price-card.featured .price-amount { color: var(--white); }
+
+  .price-per {
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-bottom: 16px;
+  }
+
+  .price-card.featured .price-per { color: rgba(255,255,255,0.4); }
+
+  .price-divider {
+    height: 1px;
+    background: var(--gray-100);
+    margin: 16px 0;
+  }
+
+  .price-card.featured .price-divider { background: rgba(255,255,255,0.08); }
+
+  .price-who {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.5;
+  }
+
+  .price-card.featured .price-who { color: rgba(255,255,255,0.6); }
+
+  .price-cta {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    background: rgba(59,130,246,0.1);
+    color: var(--blue);
+    transition: background 0.2s;
+  }
+  .price-cta:hover { background: rgba(59,130,246,0.2); }
+
+  .price-card.featured .price-cta {
+    background: var(--blue);
+    color: var(--white);
+  }
+  .price-card.featured .price-cta:hover { background: #2563eb; }
+
+  /* ── CTA ────────────────────────────────── */
+  .cta-section {
+    background: var(--navy);
+    padding: 90px 5%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cta-inner {
+    max-width: 620px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-title {
+    font-family: var(--serif);
+    font-size: clamp(28px, 3vw, 42px);
+    color: var(--white);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+
+  .cta-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  .cta-email-form {
+    display: flex;
+    gap: 10px;
+    max-width: 440px;
+    margin: 0 auto 20px;
+  }
+
+  .cta-email-form input {
+    flex: 1;
+    padding: 13px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .cta-email-form input::placeholder { color: rgba(255,255,255,0.3); }
+  .cta-email-form input:focus { border-color: var(--blue); }
+
+  .cta-email-form button {
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    padding: 13px 22px;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .cta-email-form button:hover { background: #2563eb; }
+
+  .cta-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ── FOOTER ─────────────────────────────── */
+  footer {
+    background: #080f1e;
+    padding: 32px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 28px;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+  .footer-copy {
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* ── RESPONSIVE ─────────────────────────── */
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+    .hero-preview { display: none; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-grid { grid-template-columns: 1fr; }
+    .steps-grid::before { display: none; }
+    .privacy-inner { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+    .footer-links { justify-content: center; }
+  }
+
+  @media (max-width: 560px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .stats-inner { grid-template-columns: 1fr 1fr; }
+    .cta-email-form { flex-direction: column; }
+  }
+
+  /* ── ANIMATIONS ─────────────────────────── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Swift<span>Chart</span></a>
+  <a href="mailto:tyler@swiftchart.app" class="nav-cta">Request a Demo</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Now Available for Independent Physicians</div>
+      <h1>Patient notes.<br><em>Done in seconds.</em><br>Never leaving<br>your device.</h1>
+      <p class="hero-sub">SwiftChart generates professional SOAP notes from voice or text in under 10 seconds — completely offline, encrypted, and HIPAA-conscious. Built for independent physicians who are tired of spending hours on documentation.</p>
+      <div class="hero-actions">
+        <a href="mailto:tyler@swiftchart.app" class="btn-primary">Request a Demo →</a>
+        <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+      </div>
+    </div>
+
+    <!-- App Preview Window -->
+    <div class="hero-preview">
+      <div class="app-window">
+        <div class="app-bar">
+          <div class="app-dot red"></div>
+          <div class="app-dot yellow"></div>
+          <div class="app-dot green"></div>
+          <div class="app-title-bar">SwiftChart</div>
+        </div>
+        <div class="app-body">
+          <div class="app-header-row">
+            <div>
+              <div class="app-patient-name">J. Anderson</div>
+              <div class="app-visits">3 visits · Apr 11, 2026</div>
+            </div>
+            <div class="app-new-note">+ New Note</div>
+          </div>
+
+          <div class="alert-box">
+            <div class="alert-title">⚠ Active Pattern Alert</div>
+            <div class="alert-text">Recurring sleep disturbance noted across 3 consecutive visits. Consider sleep study referral.</div>
+          </div>
+
+          <div class="soap-box">
+            <div class="soap-row">
+              <div class="soap-label">Subjective</div>
+              <div class="soap-text">The patient reports improved mood on Lexapro 20mg. Sleep remains disrupted, waking at 3am. Denies suicidal ideation.</div>
+            </div>
+            <div class="soap-row">
+              <div class="soap-label">Assessment</div>
+              <div class="soap-text">Major depressive disorder, moderate severity, partial response to current regimen.</div>
+            </div>
+            <div class="soap-row">
+              <div class="soap-label">Plan</div>
+              <div class="soap-text">Continue Lexapro 20mg. Add sleep hygiene counseling. Follow up in 4 weeks.</div>
+            </div>
+          </div>
+
+          <div class="app-footer-row">
+            <div class="app-timing">Generated in 3.2s · voice input · all local</div>
+            <div class="copy-btn">📋 Copy for EMR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div>
+      <div class="stat-number"><span>&lt;</span>10s</div>
+      <div class="stat-label">Note generation time</div>
+    </div>
+    <div>
+      <div class="stat-number">100<span>%</span></div>
+      <div class="stat-label">Offline — no cloud, ever</div>
+    </div>
+    <div>
+      <div class="stat-number">2<span>–</span>3h</div>
+      <div class="stat-label">Saved daily per physician</div>
+    </div>
+    <div>
+      <div class="stat-number">0</div>
+      <div class="stat-label">Patient data transmitted</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" style="background: var(--off-white);">
+  <div class="section-inner">
+    <p class="section-eyebrow fade-up">Everything You Need</p>
+    <h2 class="section-title fade-up">Built for how doctors<br>actually work.</h2>
+    <p class="section-sub fade-up">SwiftChart handles the documentation burden so you can focus on what matters — your patients.</p>
+
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon blue">🎙️</div>
+        <div class="feature-title">Voice Dictation</div>
+        <div class="feature-text">Speak your note naturally after each patient visit. SwiftChart transcribes and structures it into a complete SOAP note — all on your device.</div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon green">⚡</div>
+        <div class="feature-title">Instant SOAP Notes</div>
+        <div class="feature-text">From raw input to a professionally formatted Subjective, Objective, Assessment, and Plan in under 10 seconds. Ready to paste into any EMR.</div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon amber">🧠</div>
+        <div class="feature-title">Pattern Detection</div>
+        <div class="feature-text">SwiftChart analyzes visit history and automatically flags recurring symptoms, medication concerns, and care gaps you might otherwise miss.</div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon purple">🔒</div>
+        <div class="feature-title">Fully Offline</div>
+        <div class="feature-text">All AI processing happens on your computer. Patient data is encrypted locally and never transmitted. No internet required after setup.</div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon teal">📋</div>
+        <div class="feature-title">EMR Ready</div>
+        <div class="feature-text">One click copies your formatted note. Paste directly into EPIC, Cerner, Avatar, or any other system. No integration required.</div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon red">📈</div>
+        <div class="feature-title">Visit Timeline</div>
+        <div class="feature-text">Every patient's complete note history in one place. See how symptoms have evolved, what was tried, and what worked — across every visit.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how-it-works">
+  <div class="section-inner">
+    <p class="section-eyebrow" style="color: var(--blue-light);">Simple by Design</p>
+    <h2 class="section-title">Three steps. Done.</h2>
+    <p class="section-sub">SwiftChart fits your existing workflow — not the other way around.</p>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Speak or Type</div>
+        <div class="step-text">After seeing a patient, dictate your notes naturally or type them in. No special format required — just talk like you normally would.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">AI Structures It</div>
+        <div class="step-text">SwiftChart's local AI generates a complete, professional SOAP note in seconds. Everything stays on your device — nothing leaves.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-title">Copy to Your EMR</div>
+        <div class="step-text">One click copies your formatted note. Paste it directly into EPIC, Cerner, Avatar, or any other system. You're done.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="privacy-section">
+  <div class="privacy-inner">
+    <div>
+      <p class="section-eyebrow">Privacy First</p>
+      <h2 class="section-title">HIPAA-conscious<br>by architecture,<br>not just policy.</h2>
+      <p class="section-sub" style="margin-bottom: 24px;">Every other AI documentation tool sends your patient data to a cloud server. SwiftChart is different by design — there is nothing to intercept because nothing travels anywhere.</p>
+      <div class="hipaa-box">
+        <div class="hipaa-box-title">IS SWIFTCHART HIPAA COMPLIANT?</div>
+        <div class="hipaa-box-text">SwiftChart stores all patient data locally on your device using military-grade encryption. No data is ever transmitted to external servers. A Business Associate Agreement (BAA) is available upon request.</div>
+      </div>
+    </div>
+
+    <div class="privacy-badges">
+      <div class="privacy-badge">
+        <div class="privacy-badge-icon">🔐</div>
+        <div class="privacy-badge-title">Encrypted Storage</div>
+        <div class="privacy-badge-text">Every note encrypted at rest. Unreadable without your password.</div>
+      </div>
+      <div class="privacy-badge">
+        <div class="privacy-badge-icon">📵</div>
+        <div class="privacy-badge-title">No Internet Required</div>
+        <div class="privacy-badge-text">Works completely offline after initial setup.</div>
+      </div>
+      <div class="privacy-badge">
+        <div class="privacy-badge-icon">🏠</div>
+        <div class="privacy-badge-title">Local AI Only</div>
+        <div class="privacy-badge-text">All AI runs on your machine. No API calls. No external servers.</div>
+      </div>
+      <div class="privacy-badge">
+        <div class="privacy-badge-icon">📄</div>
+        <div class="privacy-badge-title">BAA Available</div>
+        <div class="privacy-badge-text">Business Associate Agreement provided to all customers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<div style="background:linear-gradient(135deg,#1a2540,#0f1729);padding:20px 5%;text-align:center;border-top:1px solid rgba(59,130,246,0.2);border-bottom:1px solid rgba(59,130,246,0.2);"><p style="font-family:DM Sans,sans-serif;font-size:14px;color:rgba(255,255,255,0.7);">⭐ <strong style="color:#ffffff;">Founding Rate closes at 20 physicians</strong> — 18 spots remaining. After that, solo pricing moves to $99/month permanently.</p></div>
+<section class="pricing-section" id="pricing">
+  <div class="section-inner" style="text-align:center;">
+    <p class="section-eyebrow" style="text-align:center;">Transparent Pricing</p>
+    <h2 class="section-title" style="text-align:center;">Simple plans for every practice.</h2>
+    <p class="section-sub" style="text-align:center; margin: 0 auto 56px;">Start with the founding rate and lock it in forever. Cancel anytime.</p>
+  </div>
+
+  <div class="pricing-grid">
+    <div class="price-card featured">
+      <div class="price-badge">⭐ Founding Rate — 20 Spots Only</div>
+      <div class="price-plan">Solo — Early Access</div>
+      <div class="price-amount">$79</div>
+      <div class="price-per">per month · locked in forever</div>
+      <div class="price-divider"></div>
+      <div class="price-who"><strong style="color:#22c55e;">18 spots remaining.</strong> For the first 20 physicians to join SwiftChart. This rate locks in forever — never increases, never expires.</div>
+      <a href="mailto:tyler@swiftchart.app" class="price-cta">Get Started →</a>
+    </div>
+
+    <div class="price-card">
+      <div class="price-plan">Solo Practice</div>
+      <div class="price-amount">$99</div>
+      <div class="price-per">per month</div>
+      <div class="price-divider"></div>
+      <div class="price-who">Individual physician. Full access to all features.</div>
+      <a href="mailto:tyler@swiftchart.app" class="price-cta">Get Started →</a>
+    </div>
+
+    <div class="price-card">
+      <div class="price-plan">Small Clinic</div>
+      <div class="price-amount">$150</div>
+      <div class="price-per">per provider/month · 2–5 providers</div>
+      <div class="price-divider"></div>
+      <div class="price-who">All providers in your practice covered under one plan.</div>
+      <a href="mailto:tyler@swiftchart.app" class="price-cta">Contact Us →</a>
+    </div>
+
+    <div class="price-card">
+      <div class="price-plan">Medium Clinic</div>
+      <div class="price-amount">$125</div>
+      <div class="price-per">per provider/month · 6–10 providers</div>
+      <div class="price-divider"></div>
+      <div class="price-who">Volume pricing for larger independent practices.</div>
+      <a href="mailto:tyler@swiftchart.app" class="price-cta">Contact Us →</a>
+    </div>
+  </div>
+
+  <p style="text-align:center; margin-top:24px; font-size:13px; color:var(--gray-500);">
+    Available for Mac and Windows · Works with EPIC, Cerner, Avatar, and all EMR systems · BAA included
+  </p>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="cta-inner">
+    <h2 class="cta-title">Ready to get your evenings back?</h2>
+    <p class="cta-sub">Join the physicians already using SwiftChart to cut documentation time in half — completely offline and private.</p>
+    <div class="cta-email-form">
+      <input type="email" placeholder="your@email.com" id="cta-email">
+      <button onclick="requestDemo()">Request Demo</button>
+    </div>
+    <p class="cta-note">Or email us directly at <a href="mailto:tyler@swiftchart.app" style="color:rgba(255,255,255,0.4);">tyler@swiftchart.app</a></p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">SwiftChart</a>
+  <div class="footer-links">
+    <a href="#how-it-works">How It Works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="mailto:tyler@swiftchart.app">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 SwiftChart · swiftchart.app</div>
+</footer>
+
+<script>
+  // Fade-up animations on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Demo request
+  function requestDemo() {
+    const email = document.getElementById('cta-email').value;
+    if (email && email.includes('@')) {
+      window.location.href = `mailto:tyler@swiftchart.app?subject=SwiftChart Demo Request&body=Hi, I'd like to request a demo of SwiftChart. My email is ${email}`;
+    } else {
+      alert('Please enter a valid email address.');
+    }
+  }
+</script>
+
+</body>
+</html>
